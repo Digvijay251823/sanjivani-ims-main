@@ -1,20 +1,26 @@
 package com.sanjivani.lms.service;
 
-import com.sanjivani.lms.entity.ActivityEntity;
-import com.sanjivani.lms.interfaces.ActivityService;
-import com.sanjivani.lms.model.Activity;
-import com.sanjivani.lms.repository.ActivityRepository;
-import lombok.NonNull;
+import java.util.Date;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.sanjivani.lms.entity.ActivityEntity;
+import com.sanjivani.lms.interfaces.ActivityService;
+import com.sanjivani.lms.model.Activity;
+import com.sanjivani.lms.repository.ActivityRepository;
+
+import lombok.NonNull;
 
 @Service
 public class ActivityServiceImpl implements ActivityService {
@@ -44,10 +50,10 @@ public class ActivityServiceImpl implements ActivityService {
             throw new IllegalArgumentException("Name cannot be null or empty");
         String description = activity.getDescription();
         String createdBy;
-        if(null == activity.getCreatedBy())
+        if(activity.getCreatedBy() ==null ){
             createdBy = "SYSTEM";
-        else
-            createdBy = activity.getCreatedBy();
+        }else{
+            createdBy = activity.getCreatedBy();}
 
         activityRepository.save(ActivityEntity.builder()
                 .name(name)
@@ -88,7 +94,6 @@ public class ActivityServiceImpl implements ActivityService {
             createdBy = "SYSTEM";
         else
             createdBy = activityEntity.getCreatedBy();
-
         Date created = activityEntity.getCreated();
         Date modified = activityEntity.getModified();
 

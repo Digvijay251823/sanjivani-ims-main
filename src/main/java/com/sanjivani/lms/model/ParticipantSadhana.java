@@ -1,8 +1,15 @@
 package com.sanjivani.lms.model;
-import lombok.*;
-
 import java.time.LocalTime;
 import java.util.Date;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -33,8 +40,6 @@ public class ParticipantSadhana {
 
     //Sadhana
     private Integer numberOfRounds;
-    private Integer earlyJapaRoundsBefore8AM;
-    private Integer earlyJapaRoundsAfter8AM;
     private LocalTime first8RoundsCompletedTime;
     private LocalTime next8RoundsCompletedTime;
     private LocalTime wakeUpTime;
@@ -47,6 +52,9 @@ public class ParticipantSadhana {
     private String speaker;
     private Boolean attendedArti;
     private Integer mobileInternetUsage;
+    private String topic;
+    private String visibleSadhana;
+
 
     @NonNull
     private String sadhanaDate;

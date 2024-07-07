@@ -1,25 +1,30 @@
 package com.sanjivani.lms.service;
 
-import com.sanjivani.lms.entity.ProgramEntity;
-import com.sanjivani.lms.entity.SadhanaFormEntity;
-import com.sanjivani.lms.interfaces.ProgramService;
-import com.sanjivani.lms.interfaces.SadhanaFormService;
-import com.sanjivani.lms.model.Program;
-import com.sanjivani.lms.model.SadhanaForm;
-import com.sanjivani.lms.repository.ProgramRepository;
-import com.sanjivani.lms.repository.SadhanaFormRepository;
-import jakarta.transaction.Transactional;
-import lombok.NonNull;
+import java.util.Date;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.sanjivani.lms.entity.ProgramEntity;
+import com.sanjivani.lms.entity.SadhanaFormEntity;
+import com.sanjivani.lms.interfaces.ProgramService;
+import com.sanjivani.lms.interfaces.SadhanaFormService;
+import com.sanjivani.lms.model.SadhanaForm;
+import com.sanjivani.lms.repository.ProgramRepository;
+import com.sanjivani.lms.repository.SadhanaFormRepository;
+
+import jakarta.transaction.Transactional;
+import lombok.NonNull;
 
 @Service
 public class SadhanaFormServiceImpl implements SadhanaFormService {
@@ -55,8 +60,6 @@ public class SadhanaFormServiceImpl implements SadhanaFormService {
         }
 
         //Sadhana
-        Boolean earlyJapaRoundsBefore8AM = sadhanaForm.getEarlyJapaRoundsBefore8AM();
-        Boolean earlyJapaRoundsAfter8AM = sadhanaForm.getEarlyJapaRoundsAfter8AM();
         Boolean numberOfRounds = sadhanaForm.getNumberOfRounds();
         Boolean first8RoundsCompletedTime = sadhanaForm.getFirst8RoundsCompletedTime();
         Boolean next8RoundsCompletedTime = sadhanaForm.getNext8RoundsCompletedTime();
@@ -70,9 +73,9 @@ public class SadhanaFormServiceImpl implements SadhanaFormService {
         Boolean speaker = sadhanaForm.getSpeaker();
         Boolean attendedArti = sadhanaForm.getAttendedArti();
         Boolean mobileInternetUsage = sadhanaForm.getMobileInternetUsage();
-        if((null == earlyJapaRoundsBefore8AM || Boolean.FALSE.equals(earlyJapaRoundsAfter8AM)) &&
-                (null == earlyJapaRoundsAfter8AM || Boolean.FALSE.equals(earlyJapaRoundsAfter8AM)) &&
-                (null == numberOfRounds || Boolean.FALSE.equals(numberOfRounds)) &&
+        Boolean topic = sadhanaForm.getTopic();
+        Boolean visibleSadhana = sadhanaForm.getVisibleSadhana();
+        if((null == numberOfRounds || Boolean.FALSE.equals(numberOfRounds)) &&
                 (null == first8RoundsCompletedTime || Boolean.FALSE.equals(first8RoundsCompletedTime)) &&
                 (null == next8RoundsCompletedTime || Boolean.FALSE.equals(next8RoundsCompletedTime)) &&
                 (null == wakeUpTime || Boolean.FALSE.equals(wakeUpTime)) &&
@@ -84,13 +87,13 @@ public class SadhanaFormServiceImpl implements SadhanaFormService {
                 (null == otherClassHearing || Boolean.FALSE.equals(otherClassHearing)) &&
                 (null == speaker || Boolean.FALSE.equals(speaker)) &&
                 (null == attendedArti || Boolean.FALSE.equals(attendedArti)) &&
-                (null == mobileInternetUsage || Boolean.FALSE.equals(mobileInternetUsage)))
+                (null == mobileInternetUsage || Boolean.FALSE.equals(mobileInternetUsage))&&
+                (null == topic || Boolean.FALSE.equals(topic))&&
+                (null == visibleSadhana || Boolean.FALSE.equals(visibleSadhana))                )
             throw new IllegalArgumentException("At least one field has to be configured for saving the form");
 
         SadhanaFormEntity sadhanaFormEntity = sadhanaFormRepository.save(SadhanaFormEntity.builder()
                 .program(programEntity)
-                .earlyJapaRoundsBefore8AM(earlyJapaRoundsBefore8AM)
-                .earlyJapaRoundsAfter8AM(earlyJapaRoundsAfter8AM)
                 .numberOfRounds(numberOfRounds)
                 .first8RoundsCompletedTime(first8RoundsCompletedTime)
                 .next8RoundsCompletedTime(next8RoundsCompletedTime)
@@ -104,6 +107,8 @@ public class SadhanaFormServiceImpl implements SadhanaFormService {
                 .speaker(speaker)
                 .attendedArti(attendedArti)
                 .mobileInternetUsage(mobileInternetUsage)
+                .topic(topic)
+                .visibleSadhana(visibleSadhana)
                 .build());
 
         Long Id = sadhanaFormEntity.getId();
@@ -139,8 +144,6 @@ public class SadhanaFormServiceImpl implements SadhanaFormService {
             throw new IllegalArgumentException("Sadhana Form cannot be updated for a different Program");
 
         //Sadhana
-        Boolean earlyJapaRoundsBefore8AM = sadhanaForm.getEarlyJapaRoundsBefore8AM();
-        Boolean earlyJapaRoundsAfter8AM = sadhanaForm.getEarlyJapaRoundsAfter8AM();
         Boolean numberOfRounds = sadhanaForm.getNumberOfRounds();
         Boolean first8RoundsCompletedTime = sadhanaForm.getFirst8RoundsCompletedTime();
         Boolean next8RoundsCompletedTime = sadhanaForm.getNext8RoundsCompletedTime();
@@ -154,9 +157,9 @@ public class SadhanaFormServiceImpl implements SadhanaFormService {
         Boolean speaker = sadhanaForm.getSpeaker();
         Boolean attendedArti = sadhanaForm.getAttendedArti();
         Boolean mobileInternetUsage = sadhanaForm.getMobileInternetUsage();
-        if((null == earlyJapaRoundsBefore8AM || Boolean.FALSE.equals(earlyJapaRoundsAfter8AM)) &&
-                (null == earlyJapaRoundsAfter8AM || Boolean.FALSE.equals(earlyJapaRoundsAfter8AM)) &&
-                (null == numberOfRounds || Boolean.FALSE.equals(numberOfRounds)) &&
+        Boolean topic = sadhanaForm.getTopic();
+        Boolean visibleSadhana = sadhanaForm.getVisibleSadhana();
+        if((null == numberOfRounds || Boolean.FALSE.equals(numberOfRounds)) &&
                 (null == first8RoundsCompletedTime || Boolean.FALSE.equals(first8RoundsCompletedTime)) &&
                 (null == next8RoundsCompletedTime || Boolean.FALSE.equals(next8RoundsCompletedTime)) &&
                 (null == wakeUpTime || Boolean.FALSE.equals(wakeUpTime)) &&
@@ -168,11 +171,12 @@ public class SadhanaFormServiceImpl implements SadhanaFormService {
                 (null == otherClassHearing || Boolean.FALSE.equals(otherClassHearing)) &&
                 (null == speaker || Boolean.FALSE.equals(speaker)) &&
                 (null == attendedArti || Boolean.FALSE.equals(attendedArti)) &&
-                (null == mobileInternetUsage || Boolean.FALSE.equals(mobileInternetUsage)))
+                (null == mobileInternetUsage || Boolean.FALSE.equals(mobileInternetUsage))&&
+                (null == topic || Boolean.FALSE.equals(topic))&&
+                (null == visibleSadhana || Boolean.FALSE.equals(visibleSadhana))
+                )
             throw new IllegalArgumentException("At least one field has to be configured for updating the form");
 
-        sadhanaFormEntity.setEarlyJapaRoundsBefore8AM(earlyJapaRoundsBefore8AM);
-        sadhanaFormEntity.setEarlyJapaRoundsAfter8AM(earlyJapaRoundsAfter8AM);
         sadhanaFormEntity.setNumberOfRounds(numberOfRounds);
         sadhanaFormEntity.setFirst8RoundsCompletedTime(first8RoundsCompletedTime);
         sadhanaFormEntity.setNext8RoundsCompletedTime(next8RoundsCompletedTime);
@@ -186,7 +190,8 @@ public class SadhanaFormServiceImpl implements SadhanaFormService {
         sadhanaFormEntity.setSpeaker(speaker);
         sadhanaFormEntity.setAttendedArti(attendedArti);
         sadhanaFormEntity.setMobileInternetUsage(mobileInternetUsage);
-
+        sadhanaFormEntity.setTopic(topic);
+        sadhanaFormEntity.setVisibleSadhana(visibleSadhana);
         sadhanaFormRepository.save(sadhanaFormEntity);
     }
 
@@ -225,8 +230,6 @@ public class SadhanaFormServiceImpl implements SadhanaFormService {
             return null;
 
         //Sadhana
-        Boolean earlyJapaRoundsBefore8AM = sadhanaFormEntity.getEarlyJapaRoundsBefore8AM();
-        Boolean earlyJapaRoundsAfter8AM = sadhanaFormEntity.getEarlyJapaRoundsAfter8AM();
         Boolean numberOfRounds = sadhanaFormEntity.getNumberOfRounds();
         Boolean first8RoundsCompletedTime = sadhanaFormEntity.getFirst8RoundsCompletedTime();
         Boolean next8RoundsCompletedTime = sadhanaFormEntity.getNext8RoundsCompletedTime();
@@ -240,14 +243,14 @@ public class SadhanaFormServiceImpl implements SadhanaFormService {
         Boolean speaker = sadhanaFormEntity.getSpeaker();
         Boolean attendedArti = sadhanaFormEntity.getAttendedArti();
         Boolean mobileInternetUsage = sadhanaFormEntity.getMobileInternetUsage();
+        Boolean topic = sadhanaFormEntity.getTopic();
+        Boolean visibleSadhana = sadhanaFormEntity.getVisibleSadhana();
         Date created = sadhanaFormEntity.getCreated();
         Date modified = sadhanaFormEntity.getModified();
 
         return SadhanaForm.builder()
                 .id(id)
                 .programId(programId)
-                .earlyJapaRoundsBefore8AM(earlyJapaRoundsBefore8AM)
-                .earlyJapaRoundsAfter8AM(earlyJapaRoundsAfter8AM)
                 .numberOfRounds(numberOfRounds)
                 .first8RoundsCompletedTime(first8RoundsCompletedTime)
                 .next8RoundsCompletedTime(next8RoundsCompletedTime)
@@ -261,6 +264,8 @@ public class SadhanaFormServiceImpl implements SadhanaFormService {
                 .speaker(speaker)
                 .attendedArti(attendedArti)
                 .mobileInternetUsage(mobileInternetUsage)
+                .topic(topic)
+                .visibleSadhana(visibleSadhana)
                 .created(created)
                 .modified(modified)
                 .build();

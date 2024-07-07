@@ -1,12 +1,25 @@
 package com.sanjivani.lms.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import java.io.Serializable;
+import java.util.Date;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.io.Serializable;
-import java.util.Date;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -28,12 +41,6 @@ public class SadhanaFormEntity implements Serializable {
     //Sadhana
     @Column(columnDefinition = "boolean default false", nullable = false)
     private Boolean numberOfRounds;
-
-    @Column(columnDefinition = "boolean default false", nullable = false)
-    private Boolean earlyJapaRoundsBefore8AM;
-
-    @Column(columnDefinition = "boolean default false", nullable = false)
-    private Boolean earlyJapaRoundsAfter8AM;
 
     @Column(columnDefinition = "boolean default false", nullable = false)
     private Boolean first8RoundsCompletedTime;
@@ -70,6 +77,10 @@ public class SadhanaFormEntity implements Serializable {
 
     @Column(columnDefinition = "boolean default false", nullable = false)
     private Boolean mobileInternetUsage;
+    @Column(columnDefinition = "boolean default false", nullable = false)
+    private Boolean topic;
+    @Column(columnDefinition = "boolean default false", nullable = false)
+    private Boolean visibleSadhana;
 
     @CreationTimestamp
     private Date created;

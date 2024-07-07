@@ -1,17 +1,5 @@
 package com.sanjivani.lms.service;
 
-import com.sanjivani.lms.entity.*;
-import com.sanjivani.lms.interfaces.ParticipantSadhanaService;
-import com.sanjivani.lms.model.ParticipantSadhana;
-import com.sanjivani.lms.repository.*;
-import lombok.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
-import org.springframework.stereotype.Service;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -20,6 +8,28 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import com.sanjivani.lms.entity.ParticipantEntity;
+import com.sanjivani.lms.entity.ParticipantSadhanaEntity;
+import com.sanjivani.lms.entity.ProgramEntity;
+import com.sanjivani.lms.interfaces.ParticipantSadhanaService;
+import com.sanjivani.lms.model.ParticipantSadhana;
+import com.sanjivani.lms.repository.ParticipantRepository;
+import com.sanjivani.lms.repository.ParticipantSadhanaRepository;
+import com.sanjivani.lms.repository.ProgramRepository;
+
+import lombok.NonNull;
 
 @Service
 public class ParticipantSadhanaServiceImpl implements ParticipantSadhanaService {
@@ -63,8 +73,6 @@ public class ParticipantSadhanaServiceImpl implements ParticipantSadhanaService 
             throw new IllegalArgumentException("Participant Sadhana cannot be registered for program with incomplete details");
 
         //Sadhana
-        Integer earlyJapaRoundsBefore8AM = participantSadhana.getEarlyJapaRoundsBefore8AM();
-        Integer earlyJapaRoundsAfter8AM = participantSadhana.getEarlyJapaRoundsAfter8AM();
         Integer numberOfRounds = participantSadhana.getNumberOfRounds();
         LocalTime first8RoundsCompletedTime = participantSadhana.getFirst8RoundsCompletedTime();
         LocalTime next8RoundsCompletedTime = participantSadhana.getNext8RoundsCompletedTime();
@@ -78,6 +86,8 @@ public class ParticipantSadhanaServiceImpl implements ParticipantSadhanaService 
         String speaker = participantSadhana.getSpeaker();
         Boolean attendedArti = participantSadhana.getAttendedArti();
         Integer mobileInternetUsage = participantSadhana.getMobileInternetUsage();
+        String topic= participantSadhana.getTopic();
+        String visibleSadhana= participantSadhana.getVisibleSadhana();
 
         String sadhanaDateString = participantSadhana.getSadhanaDate();
         if(sadhanaDateString.isEmpty()) {
@@ -105,8 +115,6 @@ public class ParticipantSadhanaServiceImpl implements ParticipantSadhanaService 
                 .participantContactNumber(participantContactNumber)
                 .programId(programId)
                 .programName(programName)
-                .earlyJapaRoundsBefore8AM(earlyJapaRoundsBefore8AM)
-                .earlyJapaRoundsAfter8AM(earlyJapaRoundsAfter8AM)
                 .numberOfRounds(numberOfRounds)
                 .first8RoundsCompletedTime(first8RoundsCompletedTime)
                 .next8RoundsCompletedTime(next8RoundsCompletedTime)
@@ -209,8 +217,6 @@ public class ParticipantSadhanaServiceImpl implements ParticipantSadhanaService 
             return null;
 
         //Sadhana
-        Integer earlyJapaRoundsBefore8AM = participantSadhanaEntity.getEarlyJapaRoundsBefore8AM();
-        Integer earlyJapaRoundsAfter8AM = participantSadhanaEntity.getEarlyJapaRoundsAfter8AM();
         Integer numberOfRounds = participantSadhanaEntity.getNumberOfRounds();
         LocalTime first8RoundsCompletedTime = participantSadhanaEntity.getFirst8RoundsCompletedTime();
         LocalTime next8RoundsCompletedTime = participantSadhanaEntity.getNext8RoundsCompletedTime();
@@ -224,6 +230,8 @@ public class ParticipantSadhanaServiceImpl implements ParticipantSadhanaService 
         String speaker = participantSadhanaEntity.getSpeaker();
         Boolean attendedArti = participantSadhanaEntity.getAttendedArti();
         Integer mobileInternetUsage = participantSadhanaEntity.getMobileInternetUsage();
+        String topic = participantSadhanaEntity.getTopic();
+        String visibleSadhana = participantSadhanaEntity.getVisibleSadhana();
 
         String sadhanaDateString = participantSadhanaEntity.getSadhanaDate();
         if(null == sadhanaDateString || sadhanaDateString.isEmpty())
@@ -241,8 +249,6 @@ public class ParticipantSadhanaServiceImpl implements ParticipantSadhanaService 
                 .participantLastName(participantLastName)
                 .participantWaNumber(participantWaNumber)
                 .participantContactNumber(participantContactNumber)
-                .earlyJapaRoundsBefore8AM(earlyJapaRoundsBefore8AM)
-                .earlyJapaRoundsAfter8AM(earlyJapaRoundsAfter8AM)
                 .numberOfRounds(numberOfRounds)
                 .first8RoundsCompletedTime(first8RoundsCompletedTime)
                 .next8RoundsCompletedTime(next8RoundsCompletedTime)
@@ -256,6 +262,8 @@ public class ParticipantSadhanaServiceImpl implements ParticipantSadhanaService 
                 .speaker(speaker)
                 .attendedArti(attendedArti)
                 .mobileInternetUsage(mobileInternetUsage)
+                .topic(topic)
+                .visibleSadhana(visibleSadhana)
                 .sadhanaDate(sadhanaDateString)
                 .created(created)
                 .modified(modified)
