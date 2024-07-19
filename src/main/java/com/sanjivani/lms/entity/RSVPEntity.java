@@ -32,7 +32,6 @@ import lombok.ToString;
 @Entity
 @Table(name="rsvp")
 public class RSVPEntity implements Serializable {
-
     @EmbeddedId
     private AttendanceKey id;
 
@@ -45,6 +44,9 @@ public class RSVPEntity implements Serializable {
     @MapsId("participantId")
     @JoinColumn(name = "participant")
     private ParticipantEntity participant;
+
+    @Column(nullable = true)
+    private Long membersComming;
 
     @Column(nullable = false)
     private RSVPOption rsvp;

@@ -1,29 +1,45 @@
 package com.sanjivani.lms.service;
 
-import com.sanjivani.lms.entity.*;
-import com.sanjivani.lms.enums.AudienceType;
-import com.sanjivani.lms.enums.LevelStatus;
-import com.sanjivani.lms.enums.ProgramType;
-import com.sanjivani.lms.enums.RSVPOption;
-import com.sanjivani.lms.interfaces.ParticipantActivityService;
-import com.sanjivani.lms.model.ParticipantActivity;
-import com.sanjivani.lms.repository.*;
-import jakarta.transaction.Transactional;
-import jakarta.transaction.TransactionalException;
-import lombok.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
-import org.springframework.stereotype.Service;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import com.sanjivani.lms.entity.ActivityEntity;
+import com.sanjivani.lms.entity.CourseEntity;
+import com.sanjivani.lms.entity.LevelEntity;
+import com.sanjivani.lms.entity.ParticipantActivityEntity;
+import com.sanjivani.lms.entity.ParticipantEntity;
+import com.sanjivani.lms.entity.ProgramEntity;
+import com.sanjivani.lms.entity.ScheduledSessionEntity;
+import com.sanjivani.lms.entity.SessionEntity;
+import com.sanjivani.lms.enums.AudienceType;
+import com.sanjivani.lms.enums.LevelStatus;
+import com.sanjivani.lms.enums.ProgramType;
+import com.sanjivani.lms.enums.RSVPOption;
+import com.sanjivani.lms.interfaces.ParticipantActivityService;
+import com.sanjivani.lms.model.ParticipantActivity;
+import com.sanjivani.lms.repository.ActivityRepository;
+import com.sanjivani.lms.repository.ParticipantActivityRepository;
+import com.sanjivani.lms.repository.ParticipantRepository;
+import com.sanjivani.lms.repository.ProgramRepository;
+import com.sanjivani.lms.repository.ScheduledSessionRepository;
+
+import jakarta.transaction.Transactional;
+import lombok.NonNull;
 
 @Service
 public class ParticipantActivityServiceImpl implements ParticipantActivityService {
@@ -356,6 +372,7 @@ public class ParticipantActivityServiceImpl implements ParticipantActivityServic
 
         //RSVP
         RSVPOption rsvpOption = participantActivityEntity.getRsvp();
+        Long membersComming = participantActivityEntity.getMembersComming();
 
         Date created = participantActivityEntity.getCreated();
         Date modified = participantActivityEntity.getModified();
@@ -390,6 +407,7 @@ public class ParticipantActivityServiceImpl implements ParticipantActivityServic
                 .courseCode(courseCode)
                 .courseName(courseName)
                 .rsvp(rsvpOption)
+                .membersComming(membersComming)
                 .activityDate(activityDateString)
                 .created(created)
                 .modified(modified)

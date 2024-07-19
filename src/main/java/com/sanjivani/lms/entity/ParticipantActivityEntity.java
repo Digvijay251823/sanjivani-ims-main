@@ -1,14 +1,30 @@
 package com.sanjivani.lms.entity;
 
-import com.sanjivani.lms.enums.*;
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Immutable;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.io.Serializable;
 import java.util.Date;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.sanjivani.lms.enums.AudienceType;
+import com.sanjivani.lms.enums.LevelStatus;
+import com.sanjivani.lms.enums.ProgramType;
+import com.sanjivani.lms.enums.RSVPOption;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -108,6 +124,9 @@ public class ParticipantActivityEntity implements Serializable {
 
     //RSVP
     private RSVPOption rsvp;
+
+    @Column(nullable = true)
+    private Long membersComming;
 
     @Column(nullable = false)
     private String activityDate;

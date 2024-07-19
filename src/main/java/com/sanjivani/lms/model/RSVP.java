@@ -1,9 +1,17 @@
 package com.sanjivani.lms.model;
 
-import com.sanjivani.lms.enums.RSVPOption;
-import lombok.*;
-
 import java.util.Date;
+
+import com.sanjivani.lms.enums.RSVPOption;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -21,6 +29,8 @@ public class RSVP {
     private Long programId;
     @NonNull
     private String scheduledSessionName;
+    
+    private Long membersComming;
     @NonNull
     private RSVPOption rsvp;
     @Setter(AccessLevel.NONE)

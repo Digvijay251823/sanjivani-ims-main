@@ -1,15 +1,15 @@
 package com.sanjivani.lms.model;
-
-import com.sanjivani.lms.entity.RolePrivilegeEntity;
-import com.sanjivani.lms.entity.UserRoleEntity;
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 
 @Data
 @Builder

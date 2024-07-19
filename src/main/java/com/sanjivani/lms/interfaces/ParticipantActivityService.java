@@ -1,11 +1,11 @@
 package com.sanjivani.lms.interfaces;
 
-import com.sanjivani.lms.model.ParticipantActivity;
-import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Date;
+import com.sanjivani.lms.model.ParticipantActivity;
+
+import lombok.NonNull;
 
 public interface ParticipantActivityService {
     void save(ParticipantActivity participantActivity) throws Exception;

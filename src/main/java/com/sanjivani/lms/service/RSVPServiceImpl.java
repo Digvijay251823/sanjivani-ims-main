@@ -1,27 +1,45 @@
 package com.sanjivani.lms.service;
 
-import com.sanjivani.lms.entity.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import com.sanjivani.lms.entity.ActivityEntity;
+import com.sanjivani.lms.entity.AttendanceKey;
+import com.sanjivani.lms.entity.CourseEntity;
+import com.sanjivani.lms.entity.LevelEntity;
+import com.sanjivani.lms.entity.ParticipantActivityEntity;
+import com.sanjivani.lms.entity.ParticipantEntity;
+import com.sanjivani.lms.entity.ProgramEntity;
+import com.sanjivani.lms.entity.RSVPEntity;
+import com.sanjivani.lms.entity.ScheduledSessionEntity;
+import com.sanjivani.lms.entity.SessionEntity;
 import com.sanjivani.lms.enums.AudienceType;
 import com.sanjivani.lms.enums.LevelStatus;
 import com.sanjivani.lms.enums.ProgramType;
 import com.sanjivani.lms.enums.RSVPOption;
 import com.sanjivani.lms.interfaces.RSVPService;
 import com.sanjivani.lms.model.RSVP;
-import com.sanjivani.lms.repository.*;
-import lombok.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
-import org.springframework.stereotype.Service;
+import com.sanjivani.lms.repository.ActivityRepository;
+import com.sanjivani.lms.repository.ParticipantActivityRepository;
+import com.sanjivani.lms.repository.ParticipantRepository;
+import com.sanjivani.lms.repository.RSVPRepository;
+import com.sanjivani.lms.repository.ScheduledSessionRepository;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.TimeZone;
-import java.util.stream.Collectors;
+import lombok.NonNull;
 
 @Service
 public class RSVPServiceImpl implements RSVPService {
@@ -123,8 +141,8 @@ public class RSVPServiceImpl implements RSVPService {
         if(null == participantContactNumber || participantContactNumber.isEmpty())
             throw new IllegalArgumentException("Participant contact number cannot be empty");
         String participantEmail = participantEntity.getEmail();
-
-
+        Long membersComming = rsvp.getMembersComming();        
+        System.out.println(membersComming);
         RSVPOption rsvpOption =  rsvp.getRsvp();
 
         rsvpRepository.save(RSVPEntity.builder()
@@ -134,6 +152,7 @@ public class RSVPServiceImpl implements RSVPService {
                         .build())
                 .participant(participantEntity)
                 .scheduledSession(scheduledSessionEntity)
+                .membersComming(membersComming)
                 .rsvp(rsvpOption)
                 .build());
 
@@ -191,6 +210,8 @@ public class RSVPServiceImpl implements RSVPService {
                 .courseId(courseId)
                 .courseName(courseName)
                 .courseCode(courseCode)
+                .courseCode(courseCode)
+                .membersComming(membersComming)
                 .rsvp(rsvpOption)
                 .activityDate(activityDateStr)
                 .build());
@@ -264,8 +285,11 @@ public class RSVPServiceImpl implements RSVPService {
         if(levelId <= 0)
             return null;
         RSVPOption rsvpOption = rsvpEntity.getRsvp();
-        if(null == rsvpOption)
+            if(null == rsvpOption)
             return null;
+        Long membersComming = rsvpEntity.getMembersComming();
+        if(null == membersComming)
+           return null;
 
         Date created = rsvpEntity.getCreated();
         Date modified = rsvpEntity.getModified();
@@ -277,6 +301,7 @@ public class RSVPServiceImpl implements RSVPService {
                 .levelId(levelId)
                 .programId(programId)
                 .rsvp(rsvpOption)
+                .membersComming(membersComming)
                 .created(created)
                 .modified(modified)
                 .build();

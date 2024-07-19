@@ -1,12 +1,20 @@
 package com.sanjivani.lms.model;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.sanjivani.lms.enums.RSVPOption;
-import jakarta.validation.constraints.Pattern;
-import lombok.*;
 
-import java.util.Date;
+import jakarta.validation.constraints.Pattern;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -96,7 +104,9 @@ public class ParticipantActivity {
 
     //RSVP
     private RSVPOption rsvp;
-
+    
+    private Long membersComming;
+    
     @NonNull
     private String activityDate;
 
