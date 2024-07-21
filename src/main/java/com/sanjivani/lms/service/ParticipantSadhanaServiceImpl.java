@@ -79,7 +79,7 @@ public class ParticipantSadhanaServiceImpl implements ParticipantSadhanaService 
         LocalTime wakeUpTime = participantSadhana.getWakeUpTime();
         LocalTime sleepTime = participantSadhana.getSleepTime();
         Integer prabhupadaBookReading = participantSadhana.getPrabhupadaBookReading();
-        Integer nonPrabhupadaBookReading = participantSadhana.getNonPrabhupadaBookReading();
+        String nonPrabhupadaBookReading = participantSadhana.getNonPrabhupadaBookReading();
         Integer prabhupadaClassHearing = participantSadhana.getPrabhupadaClassHearing();
         Integer guruClassHearing = participantSadhana.getGuruClassHearing();
         Integer otherClassHearing = participantSadhana.getOtherClassHearing();
@@ -127,6 +127,8 @@ public class ParticipantSadhanaServiceImpl implements ParticipantSadhanaService 
                 .otherClassHearing(otherClassHearing)
                 .speaker(speaker)
                 .attendedArti(attendedArti)
+                .topic(topic)
+                .visibleSadhana(visibleSadhana)
                 .mobileInternetUsage(mobileInternetUsage)
                 .sadhanaDate(sadhanaDateString)
                 .build());
@@ -223,7 +225,7 @@ public class ParticipantSadhanaServiceImpl implements ParticipantSadhanaService 
         LocalTime wakeUpTime = participantSadhanaEntity.getWakeUpTime();
         LocalTime sleepTime = participantSadhanaEntity.getSleepTime();
         Integer prabhupadaBookReading = participantSadhanaEntity.getPrabhupadaBookReading();
-        Integer nonPrabhupadaBookReading = participantSadhanaEntity.getNonPrabhupadaBookReading();
+        String nonPrabhupadaBookReading = participantSadhanaEntity.getNonPrabhupadaBookReading();
         Integer prabhupadaClassHearing = participantSadhanaEntity.getPrabhupadaClassHearing();
         Integer guruClassHearing = participantSadhanaEntity.getGuruClassHearing();
         Integer otherClassHearing = participantSadhanaEntity.getOtherClassHearing();

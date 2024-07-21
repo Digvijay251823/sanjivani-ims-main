@@ -78,7 +78,7 @@ public class ParticipantSadhanaEntity implements Serializable {
     @Column(columnDefinition = "TIME")
     private LocalTime sleepTime;
     private Integer prabhupadaBookReading;
-    private Integer nonPrabhupadaBookReading;
+    private String nonPrabhupadaBookReading;
     private Integer prabhupadaClassHearing;
     private Integer guruClassHearing;
     private Integer otherClassHearing;

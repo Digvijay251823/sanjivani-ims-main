@@ -45,7 +45,7 @@ public class ParticipantSadhana {
     private LocalTime wakeUpTime;
     private LocalTime sleepTime;
     private Integer prabhupadaBookReading;
-    private Integer nonPrabhupadaBookReading;
+    private String nonPrabhupadaBookReading;
     private Integer prabhupadaClassHearing;
     private Integer guruClassHearing;
     private Integer otherClassHearing;
